@@ -13,6 +13,7 @@ import java.awt.Choice;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.util.HashMap;
 
 public class Translater {
 
@@ -91,6 +92,28 @@ public class Translater {
 	private void fillListButtons() {
 		//TODO the API call to get the languages list.
 		listLangSrc.add("Lang 1");
-		RestUtil objRestUtil = new RestUtil();
+		getLanguagesAndPrepareLists();
 	}	
+
+	/**
+	 * getLanguages - It uses google-translate1 api to fet all the available languages.
+	 */	
+	private void getLanguagesAndPrepareLists() {
+		RestUtil objRestUtil = new RestUtil();
+		String strUrl = "https://google-translate1.p.rapidapi.com/language/translate/v2/languages?target=en";
+		
+		HashMap<String, String> hmResquestParams = new HashMap<String, String>();
+		hmResquestParams.put("Accept-Encoding", "application/gzip");
+		hmResquestParams.put("X-RapidAPI-Key", "b10ddfcdd1msh8e68be4ab8ea1a9p15fd6cjsnfaad95ca0340");
+		hmResquestParams.put("X-RapidAPI-Host", "google-translate1.p.rapidapi.com");
+		
+		HashMap<String, String> hmResponse = new HashMap<String, String>();
+		hmResponse = objRestUtil.doGetCall(strUrl, hmResquestParams);
+		
+		if(hmResponse!=null && !hmResponse.isEmpty() && hmResponse.get("Status").toString()=="OK") {
+			// Get Array of languages
+			String strResponse = hmResponse.get("Response").toString();
+			// TODO using json utils convert json string into hashmap object
+		}
+	}
 }
