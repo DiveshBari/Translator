@@ -17,7 +17,7 @@ public class RestUtil {
 	/**
 	 * Do Get call
 	 */	
-	public HashMap<String, String> doGetCall(String strUrl, HashMap<String, String> headers)
+	public HashMap<String, String> doRestCall(String strHTTPAction, String strUrl, HashMap<String, String> headers, String payload)
 	{
 		HashMap<String, String> hmResponse = new HashMap<String, String>();
 		
@@ -31,7 +31,14 @@ public class RestUtil {
 		}
 		
 		// Add the method type
-		request.method("GET", HttpRequest.BodyPublishers.noBody());
+		switch(strHTTPAction) {
+		case "GET":
+			request.method("GET", HttpRequest.BodyPublishers.noBody());
+			break;
+		case "POST":
+			request.method("POST", HttpRequest.BodyPublishers.ofString(payload));
+			break;		
+		}
 
 		try {
 			HttpResponse<String> response = HttpClient.newHttpClient().send(request.build(), HttpResponse.BodyHandlers.ofString());
@@ -52,5 +59,5 @@ public class RestUtil {
 		}
 		
 		return hmResponse;
-	}
+	}	
 }
